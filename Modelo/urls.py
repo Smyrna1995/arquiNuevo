@@ -6,4 +6,5 @@ from Modelo import views
 
 urlpatterns = [
     re_path(r'registro_lista/$', views.RegistroList.as_view()),
+    re_path(r'alumno_lista/$', views.AlumnoList.as_view()),
 ]

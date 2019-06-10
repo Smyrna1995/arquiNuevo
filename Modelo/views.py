@@ -13,7 +13,7 @@ from Modelo.serializer import RegistroSerializers
 class RegistroList(APIView):
     #Metodo get para solicitar info
     def get(self, request, format=None):
-        queryset = Registro.objects.filter(delete=False)
+        queryset = Registro.objects.filter(delete = False)
         serializer = RegistroSerializers(queryset)
         return Response(serializer.data)
 

@@ -18,7 +18,7 @@ class RegistroList(APIView):
         print("Metodo get filter")
         queryset = Registro.objects.filter(delete = False) #id.example2=id.example (en caso de llaves foraneas)
         #many = True Si aplica si retorno multiples objetos
-        serializer = RegistroSerializers(queryse, many=True)
+        serializer = RegistroSerializers(queryset, many=True)
         return Response(serializer.data)
     
     def post(self, request, format=None):
@@ -36,18 +36,19 @@ class RegistroDetail(APIView):
         except Registro.DoesNotExist:
             return 404
 
-    def get(self, id, request, format = None):
+    def get(self, request, id, format=None):
         registro = self.get_object(id)
         if registro != 404:
+            #many = True No aplica si retorno un solo objeto.
             serializer = RegistroSerializers(registro)
-            return Response(seralizer.data)
+            return Response(serializer.data)
         else:
             return Response(registro)
     
     def put(self, request, id, format=None):
         registro = self.get_object(id)
         if registro != 404:
-            serializer = ExampleSerializers(example, data=request.data)
+            serializer = RegistroSerializers(example, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 datas = serializer.data
@@ -60,8 +61,47 @@ class RegistroDetail(APIView):
 class AlumnoList(APIView):
     #Metodo get para solicitar info
     def get(self, request, format=None):
+        print("Metodo get filter")
         queryset = Alumno.objects.filter(delete = False)
-        serializer = AlumnoSerializers(queryset)
+        #many = True Si aplica si retorno multiples objetos
+        serializer = AlumnoSerializers(queryset, many=True)
         return Response(serializer.data)
+    
+    def post(self, request, format=None):
+        serializer = AlumnoSerializers(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            datas = serializer.data
+            return Response(datas)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class RegistroDetail(APIView):
+    def get_object(self, id):
+        try:
+            return Registro.objects.get(pk=id, delete=False)
+        except Registro.DoesNotExist:
+            return 404
+    
+    def get(self, request, id, format=None):
+        registro = self.get_object(id)
+        if registro != 404:
+            #many = True No aplica si retorno un solo objeto
+            serializer = RegistroSerializers(registro)
+            return Response(serializer.data)
+        else:
+            return Response(registro)
+    
+    def put(self, request, id, format=None):
+        registro = self.get_object(id)
+        if registro != 404:
+            serializer = RegistroSerializers(registro, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                datas = serializer.data
+                return Response(datas)
+            else:
+                return Response(serializer.erros, status = status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status = status.HTTP_400_BAD_REQUEST)
 
 

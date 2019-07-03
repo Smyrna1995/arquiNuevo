@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
-
+ 
 from Modelo.models import Registro
 from Modelo.models import Alumno
 
@@ -75,7 +75,7 @@ class AlumnoList(APIView):
             return Response(datas)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
-class RegistroDetail(APIView):
+class AlumnoDetail(APIView):
     def get_object(self, id):
         try:
             return Registro.objects.get(pk=id, delete=False)
